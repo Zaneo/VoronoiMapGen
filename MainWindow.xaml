@@ -1,0 +1,46 @@
+﻿<Window x:Class="VoronoiMapGen.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:conv="clr-namespace:VoronoiMapGen.CustomConverters"
+        Title="Voronoi MapGen" Height="350" Width="525" MinHeight="350" MinWidth="525">
+    <Grid>
+        <Menu Name ="MainMenu" Width="Auto" Height="20" Background="Beige" DockPanel.Dock="Top" VerticalAlignment="Top">
+            <MenuItem Header ="File">
+                <MenuItem Header ="New"></MenuItem>
+            </MenuItem>
+            <MenuItem Header ="Edit"></MenuItem>
+            <MenuItem Header ="View"></MenuItem>
+            <MenuItem Header ="Help">
+                <MenuItem Header="View Help"></MenuItem>
+                <Separator/>
+                <MenuItem Header ="About"></MenuItem>
+                <MenuItem Header ="Check For Updates"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <StackPanel Name ="MapOptions" Width="220" Height="256"  HorizontalAlignment="Left" VerticalAlignment="Center">
+            <StackPanel.Resources>
+                <conv:MapSizeConverter x:Key="MapSizeConv" />
+            </StackPanel.Resources>
+            <Label Name="MapSizeTitle">Map Size</Label>
+            <StackPanel Name="MapSizePanel" Orientation="Horizontal">
+                <Label Name="MapSizeMinLabel" Content="{Binding ElementName=MapSizeSlider, Path=Minimum, Converter= {StaticResource MapSizeConv}, Mode=OneWay}" HorizontalAlignment="Left"/>
+                <Slider Name="MapSizeSlider" Minimum="5" Maximum="10" SmallChange="1" TickFrequency="1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" Width="160"
+                    ToolTipService.InitialShowDelay="0" ToolTipService.BetweenShowDelay="0" ToolTipService.Placement="Center" ToolTip="{Binding ElementName=MapSizeSlider, Path=Value, Converter= {StaticResource MapSizeConv}, Mode=OneWay}"/>
+                <Label Name="MapSizeMaxLabel" Content="{Binding ElementName=MapSizeSlider, Path=Maximum, Converter= {StaticResource MapSizeConv}, Mode=OneWay}" HorizontalAlignment="Right"/>
+            </StackPanel>
+            <Button Name="GenerateButton" Height="25" Click="GenerateButtonClick" />
+        </StackPanel>
+
+        <Border BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Canvas Name="MapThumbnail" Width="256" Height="256" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        </Border>
+        <StatusBar Name ="MainSbar" Background="Beige" DockPanel.Dock ="Bottom"  VerticalAlignment="Bottom">
+            <StatusBarItem>
+                <TextBlock Name ="CurrentTask"/>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <ProgressBar Name="CurrentTaskProgress" Width="100" Height ="20"/> 
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
