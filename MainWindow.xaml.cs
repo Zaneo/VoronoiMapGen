@@ -23,6 +23,7 @@ THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -38,8 +39,10 @@ using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+
 using VoronoiMapGen.CustomEvents;
 using VoronoiMapGen.Generation;
+using VoronoiMapGen.Util;
 
 namespace VoronoiMapGen
 {
@@ -60,7 +63,7 @@ namespace VoronoiMapGen
             Thread.CurrentThread.Name = "UI";
             GenerateButton.Content = GeneratorIdleText;
             _worker = new BackgroundWorker {WorkerReportsProgress = true, WorkerSupportsCancellation = true};
-            _worker.DoWork+= new DoWorkEventHandler(Generate);
+            _worker.DoWork+= Generate;
             _worker.ProgressChanged += (sender, args) => CurrentTaskProgress.Value = args.ProgressPercentage;
             TaskChanging += UpdateCurrentTask;
             TaskChanging += UpdateGeneratorButton;
@@ -68,9 +71,6 @@ namespace VoronoiMapGen
         }
 
         private void GenerateButtonClick(object sender, RoutedEventArgs e) {
-            VoronoiGeneration test = new VoronoiGeneration();
-            test.BeginTask(ref MapThumbnail);
-            
             if (_worker.IsBusy) {
                 _cancelTask.Cancel();
             }
